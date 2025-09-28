@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Table - Transparent</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1950&q=80") 
+                  no-repeat center center/cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .table-container {
+      width: 95%;
+      max-width: 1200px;
+      overflow-x: auto;
+      /* Removed background to make transparent */
+      border-radius: 16px;
+      padding: 20px;
+      backdrop-filter: blur(0px); /* optional: remove blur if any */
+      box-shadow: none; /* optional: remove shadow */
+      animation: tableFade 1s ease forwards;
+    }
+
+    @keyframes tableFade {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: transparent; /* fully transparent */
+    }
+
+    th, td {
+      padding: 18px;
+      text-align: center;
+      word-wrap: break-word;
+      font-size: 16px;
+      color: #fff; /* text color remains visible */
+    }
+
+    th {
+      background: rgba(0,0,0,0.0); /* fully transparent header */
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    td {
+      background: rgba(0,0,0,0.0); /* fully transparent cells */
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    tr:hover td {
+      background: rgba(255,255,255,0.05); /* subtle hover effect for readability */
+      transform: scale(1.02);
+    }
+
+    img {
+      max-width: 200px;
+      max-height: 150px;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    }
+
+    button {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      color: #fff;
+    }
+
+    /* Button gradients */
+    .watch-btn { background: linear-gradient(135deg,#3498db,#2980b9); }
+    .edit-btn { background: linear-gradient(135deg,#2ecc71,#27ae60); }
+    .delete-btn { background: linear-gradient(135deg,#e74c3c,#c0392b); }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+    }
+
+    /* Row fade-in animation */
+    tr { opacity: 0; animation: rowFade 0.8s forwards; }
+    tr:nth-child(2) { animation-delay: 0.1s; }
+    tr:nth-child(3) { animation-delay: 0.2s; }
+    tr:nth-child(4) { animation-delay: 0.3s; }
+    tr:nth-child(5) { animation-delay: 0.4s; }
+    tr:nth-child(6) { animation-delay: 0.5s; }
+
+    @keyframes rowFade {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      th, td { font-size: 14px; padding: 12px; }
+      img { max-width: 120px; max-height: 90px; }
+      button { padding: 6px 14px; font-size: 14px; }
+    }
+
+    @media (max-width: 500px) {
+      table, th, td { display: block; text-align: left; }
+      th { display: none; }
+      td { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.2);}
+      td::before { content: attr(data-label); font-weight: bold; color: #ffcc70;}
+      img { max-width: 100px; max-height: 70px; }
+      button { padding: 6px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Trailer</th>
+        <th>Rating</th>
+        <th>Action</th>
+      </tr>
+      <tr th:each="movie : ${movies}">
+        <td data-label="ID" th:text="${movie.id}">1</td>
+        <td data-label="Name" th:text="${movie.name}">Example Movie</td>
+        <td data-label="Image">
+          <img th:src="${movie.image}" src="https://via.placeholder.com/200x150"/>
+        </td>
+        <td data-label="Trailer">
+          <a th:href="${movie.trailer}" target="_blank"><button class="watch-btn">🎬 Watch</button></a>
+        </td>
+        <td data-label="Rating" th:text="${movie.rating}">8.5</td>
+        <td data-label="Action">
+          <a th:href="@{/edit(id=${movie.id})}"><button class="edit-btn">Edit</button></a>
+          <a th:href="@{/delete(id=${movie.id})}" onclick="return confirm('Are you sure?');"><button class="delete-btn">Delete</button></a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</body>
+</html>

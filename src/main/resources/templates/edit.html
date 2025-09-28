@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Movie - Cinematic Theme</title>
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+           background: url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?auto=format&fit=crop&w=1950&q=80") 
+                  no-repeat center center/cover;
+            position: relative;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Background overlay */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1;
+        }
+
+        /* Spotlight animation */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 60%);
+            animation: spotlightMove 15s infinite linear;
+            z-index: 2;
+        }
+
+        @keyframes spotlightMove {
+            0% { transform: translateX(0) translateY(0) rotate(0deg);}
+            50% { transform: translateX(-25%) translateY(10%) rotate(180deg);}
+            100% { transform: translateX(0) translateY(0) rotate(360deg);}
+        }
+
+        /* Form container */
+        form {
+            position: relative;
+            z-index: 3;
+            background: rgba(0,0,0,0.6);
+            padding: 30px 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            width: 100%;
+            max-width: 450px;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #f5c518; /* golden cinema marquee */
+            text-shadow: 0 0 10px #f5c518, 0 0 20px rgba(255,193,7,0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #f5c518, 0 0 20px rgba(255,193,7,0.5); }
+            to { text-shadow: 0 0 20px #ffd700, 0 0 30px rgba(255,223,0,0.7);}
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #ffd700;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 14px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(255,223,0,0.6);
+            background: rgba(255,255,255,0.15);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 12px 0;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg,#d90429,#f53844);
+            color: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255,0,50,0.6);
+        }
+
+        @media (max-width: 500px) {
+            form {
+                padding: 20px;
+            }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <form th:action="@{/update}" th:object="${movie}" method="post">
+        <h1>Edit Movie 🎬</h1>
+        <input type="hidden" th:field="*{id}"/>
+        <label>Name:</label>
+        <input type="text" th:field="*{name}" placeholder="Enter movie name"/>
+        <label>Image URL:</label>
+        <input type="text" th:field="*{image}" placeholder="Enter image URL"/>
+        <label>Trailer URL:</label>
+        <input type="text" th:field="*{trailer}" placeholder="Enter trailer URL"/>
+        <label>Rating:</label>
+        <input type="text" th:field="*{rating}" placeholder="Enter rating"/>
+        <button type="submit">Update Movie</button>
+    </form>
+
+</body>
+</html>
